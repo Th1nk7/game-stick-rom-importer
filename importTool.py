@@ -65,12 +65,31 @@ def insert_game(db_path, game_id, game_name, suffix, class_type, game_type, time
     conn.close()
 
 def main():
+    if not os.path.exists(DB_PATH):
+        print(f"Database file {DB_PATH} not found.")
+        return
+    
     filepath = input("Path to ROM file: ").strip()
     if not os.path.isfile(filepath):
         print(f"File does not exist: {filepath}")
         return
 
-    game_id = int(input("Game ID (must be unique): ").strip())
+    game_id = input("Game ID (must be unique): ").strip()
+    if not game_id.isdigit():
+        print("Invalid Game ID. Must be an integer.")
+        return
+    game_id = int(game_id)
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT 1 FROM tbl_game WHERE gameid = ?", (game_id,))
+    if cursor.fetchone():
+        print("Game ID already exists. Choose another.")
+        conn.close()
+        return
+    conn.close()
+    
     ext, (class_type, game_type, timer_path) = get_game_info(filepath)
 
     game_name, suffix = copy_rom(filepath, timer_path)
