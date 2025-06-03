@@ -6,10 +6,15 @@ Tested for "M8 V7.3 4k Game Stick Lite"
 
 ## Before using the tool
 - Fully backup the SD Card before doing anything else
-- Mount the large (most likely 5th) partition /mnt/games
+- Mount the partition /dev/sdX5 to /mnt/games (check for sdX with ```lsblk```)
   - Alternatively change the location of the games.db file set in the script
+  - ```sudo mount /dev/sdX5 /mnt/games```
 
 ## Using the tool
+```
+git clone https://github.com/Th1nk7/game-stick-rom-importer.git
+python3 game-stick-rom-importer/importTool.py
+```
 
 
 ## After using the tool
